@@ -13,21 +13,21 @@ class DatabaseSeeder extends Seeder
         User::factory()->superAdmin()->create();
 
         // Create some Admins
-        User::factory()->count(2)->admin()->create();
+        User::factory()->count(1)->admin()->create();
 
         // Create some HRs
-        User::factory()->count(2)->hr()->create();
+        User::factory()->count(1)->hr()->create();
 
         // Create Head Security Guards
-        User::factory()->count(2)->headSecurityGuard()->create();
+        User::factory()->count(1)->headSecurityGuard()->create();
 
         // Create Security Guards
-        User::factory()->count(5)->securityGuard()->create();
+        User::factory()->count(1)->securityGuard()->create();
 
         // Create Clients
-        User::factory()->count(5)->client()->create();
+        User::factory()->count(1)->client()->create();
 
         // Create Applicants
-        User::factory()->count(5)->create();
+        User::factory()->count(1)->create();
     }
 }
