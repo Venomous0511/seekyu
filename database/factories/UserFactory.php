@@ -4,41 +4,73 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'role_id' => 'app.' . $this->faker->unique()->numberBetween(100, 999),
+            'role' => 'applicant',
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'password' => Hash::make('password123'), // default password for testing
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Role states
      */
-    public function unverified(): static
+    public function superAdmin()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+        return $this->state(fn() => [
+            'role_id' => 'sa.001',
+            'role' => 'super_admin',
+            'name' => 'Main Super Admin',
+            'email' => 'superadmin@example.com',
+        ]);
+    }
+
+    public function admin()
+    {
+        return $this->state(fn() => [
+            'role_id' => 'adm.' . $this->faker->unique()->numberBetween(1, 99),
+            'role' => 'admin',
+        ]);
+    }
+
+    public function hr()
+    {
+        return $this->state(fn() => [
+            'role_id' => 'hr.' . $this->faker->unique()->numberBetween(1, 99),
+            'role' => 'hr',
+        ]);
+    }
+
+    public function securityGuard()
+    {
+        return $this->state(fn() => [
+            'role_id' => 'sg.' . $this->faker->unique()->numberBetween(100, 999),
+            'role' => 'security_guard',
+        ]);
+    }
+
+    public function headSecurityGuard()
+    {
+        return $this->state(fn() => [
+            'role_id' => 'hsg.' . $this->faker->unique()->numberBetween(1, 50),
+            'role' => 'head_security_guard',
+        ]);
+    }
+
+    public function client()
+    {
+        return $this->state(fn() => [
+            'role_id' => 'c.' . $this->faker->unique()->numberBetween(1000, 9999),
+            'role' => 'client',
         ]);
     }
 }
