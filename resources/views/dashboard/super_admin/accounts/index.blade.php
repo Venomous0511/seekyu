@@ -60,11 +60,12 @@
                     <button onclick="openPasswordModal('{{ $user->id }}')"
                         class="px-2 py-1 bg-indigo-500 rounded text-white cursor-pointer">Change Password</button>
 
-                    <form action="{{ route('accounts.destroy', $user->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button class="px-2 py-1 bg-red-600 rounded text-white cursor-pointer">Delete</button>
-                    </form>
+                    <button
+                        data-url="{{ route('accounts.destroy', $user->id) }}"
+                        onclick="confirmDelete(this.dataset.url)"
+                        class="px-2 py-1 bg-red-600 rounded text-white cursor-pointer">
+                        Delete
+                    </button>
                 </td>
             </tr>
             @endforeach
@@ -197,5 +198,22 @@
                 <button type="submit" class="px-3 py-1 bg-green-600 rounded text-white cursor-pointer">Change</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal"
+    class="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-gray-800 text-white w-full max-w-md p-6 rounded-lg shadow-lg relative">
+        <h3 class="text-lg font-semibold mb-4 text-white">Confirm Delete</h3>
+        <p class="mb-4 text-gray-300">Are you sure you want to delete this user? This action cannot be undone.</p>
+        <div class="flex justify-end gap-2">
+            <button onclick="toggleModal('deleteModal')" class="px-3 py-1 bg-gray-600 rounded text-white cursor-pointer">Cancel</button>
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-3 py-1 bg-red-600 rounded text-white cursor-pointer">Delete</button>
+            </form>
+        </div>
     </div>
 </div>

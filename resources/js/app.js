@@ -1,4 +1,5 @@
 import "./bootstrap";
+import { showToast } from "./toast.js";
 
 // Section toggle
 window.showSection = function (id) {
@@ -75,7 +76,15 @@ document
             body: JSON.stringify({ name, email, role }),
         })
             .then((res) => res.json())
-            .then((data) => location.reload());
+            .then((data) => {
+                toggleModal("editUserModal");
+                showToast({
+                    title: "Changes saved",
+                    message: "User information updated successfully.",
+                    type: "success",
+                    duration: 5000,
+                });
+            });
     });
 document
     .getElementById("changePasswordForm")
@@ -87,7 +96,11 @@ document
         const token = document.querySelector('input[name="_token"]').value;
 
         if (password !== confirm) {
-            alert("Passwords do not match!");
+            showToast({
+                title: "Error",
+                message: "Passwords do not match!",
+                type: "error",
+            });
             return;
         }
 
@@ -100,8 +113,65 @@ document
             body: JSON.stringify({ password }),
         })
             .then((res) => res.json())
-            .then((data) => location.reload());
+            .then((data) => {
+                toggleModal("changePasswordModal");
+                showToast({
+                    title: "Changes saved",
+                    message: "Password updated successfully.",
+                    type: "success",
+                    duration: 5000,
+                });
+            });
     });
+
+// confirm delete
+window.confirmDelete = function (url) {
+    const deleteForm = document.getElementById("deleteForm");
+    deleteForm.action = url; // set dynamic form action
+    toggleModal("deleteModal");
+};
+
+// handle toast notification after deletion
+document.getElementById("deleteForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const form = this;
+
+    fetch(form.action, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('input[name="_token"]')
+                .value,
+            Accept: "application/json",
+        },
+        body: new FormData(form),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            toggleModal("deleteModal"); // close modal
+            // Remove the row from table (by form action url match)
+            const btn = document.querySelector(
+                `button[data-url="${form.action}"]`
+            );
+            if (btn) {
+                const row = btn.closest("tr");
+                if (row) row.remove();
+            }
+            // Show toast
+            showToast({
+                title: "Deleted",
+                message: "User has been deleted successfully.",
+                type: "success",
+            });
+        })
+        .catch((err) => {
+            toggleModal("deleteModal");
+            showToast({
+                title: "Error",
+                message: "Failed to delete user.",
+                type: "error",
+            });
+        });
+});
 
 // window.showSection = function (sectionId) {
 //     // Hide all sections

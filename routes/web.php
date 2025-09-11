@@ -51,9 +51,9 @@ Route::get('/dashboard/admin', fn() => view('dashboard.admin'))
 
 Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/dashboard/super-admin', [AccountController::class, 'index'])->name('dashboard.super-admin');
+
     Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
     Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-
     Route::put('/accounts/{user}', [AccountController::class, 'update']);
     Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
 });
