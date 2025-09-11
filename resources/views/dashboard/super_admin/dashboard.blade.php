@@ -1,7 +1,38 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
+
 @section('title', 'SeekYu - Super Admin Dashboard')
-@section('content')
-<section class="min-h-screen flex flex-col">
+
+<!-- Sidebar -->
+<aside class="w-56 bg-black text-white flex flex-col p-5 shadow-lg">
+    <div class="text-2xl font-bold mb-8">SeekYu</div>
+    <nav>
+        <ul class="space-y-3">
+            <li>
+                <a href="{{ route('dashboard.super-admin') }}"
+                    class="w-full block py-2 px-3 rounded-md hover:bg-gray-700">
+                    Account Management
+                </a>
+            </li>
+            <li>
+                <a href="#"
+                    class="w-full block py-2 px-3 rounded-md hover:bg-gray-700">
+                    Messaging
+                </a>
+            </li>
+            <li>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="w-full block text-left py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer">
+                        Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- <section class="min-h-screen flex flex-col">
     <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">Super Admin Dashboard</h1>
         <div class="text-sm flex items-center gap-4">
@@ -11,7 +42,6 @@
                 ({{ Auth::user()->role_id }})
             </div>
 
-            <!-- Logout Button -->
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
@@ -31,7 +61,6 @@
             Email: <span class="text-gray-300">{{ Auth::user()->email }}</span>
         </p>
 
-        <!-- Example dashboard cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-gray-800 p-4 rounded-lg shadow">
                 <h3 class="text-lg font-semibold mb-2">Total Users</h3>
@@ -51,5 +80,24 @@
     <footer class="bg-gray-800 text-white p-4 text-center">
         &copy; 2024 SeekYu. All rights reserved.
     </footer>
-</section>
+</section> -->
+
+@section('dashboard-content')
+<!-- Header -->
+<div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold">Super Admin Dashboard</h1>
+        <p class="text-gray-400">Manage accounts, messaging, and notifications.</p>
+    </div>
+
+    <!-- Profile -->
+    <div class="flex items-center gap-3">
+        <div>
+            <div class="font-semibold">{{ Auth::user()->name }}</div>
+            <div class="text-gray-400 text-sm">({{ Auth::user()->role_id }})</div>
+        </div>
+    </div>
+</div>
+
+@include('dashboard.super_admin.accounts.index')
 @endsection
