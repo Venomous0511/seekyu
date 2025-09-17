@@ -9,25 +9,25 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create one Super Admin
-        User::factory()->superAdmin()->create();
+        // Create Super Admin
+        User::factory(2)->superAdmin()->create();
 
-        // Create some Admins
-        User::factory()->count(1)->admin()->create();
+        // Create Admins
+        User::factory(5)->admin()->create();
 
-        // Create some HRs
-        User::factory()->count(1)->hr()->create();
+        // Create HRs
+        User::factory(5)->hr()->create();
 
         // Create Head Security Guards
-        User::factory()->count(1)->headSecurityGuard()->create();
+        User::factory(5)->headSecurityGuard()->create();
 
         // Create Security Guards
-        User::factory()->count(1)->securityGuard()->create();
+        User::factory(20)->securityGuard()->create();
 
         // Create Clients
-        User::factory()->count(1)->client()->create();
+        User::factory(10)->client()->create();
 
         // Create Applicants
-        User::factory()->count(1)->create();
+        User::factory()->create();
     }
 }

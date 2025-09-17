@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,8 @@ class RoleMiddleware
             // abort(403, 'Unauthorized');
 
             // Option 2: redirect to homepage with message
-            return redirect('/')->withErrors(['access' => 'You do not have permission to access this page.']);
+            ToastMagic::error('You do not have permission to access this page.', 'Access Denied');
+            return redirect('/');
         }
 
         return $next($request);

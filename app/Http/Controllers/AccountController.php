@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\Hash;
 class AccountController extends Controller
 {
     // Show all users
-    public function index(Request $request)
-    {
-        $role = $request->query('role');
+    // public function index(Request $request)
+    // {
+    //     $role = $request->query('role');
 
-        $users = $role
-            ? User::where('role', $role)->get()
-            : User::all();
-        return view('dashboard.super_admin.dashboard', compact('users', 'role'));
-    }
+    //     $users = $role
+    //         ? User::where('role', $role)->get()
+    //         : User::all();
+    //     return view('dashboard.super_admin.dashboard', compact('users', 'role'));
+    // }
 
     // Store new user
     public function store(Request $request)

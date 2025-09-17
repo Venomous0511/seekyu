@@ -22,8 +22,29 @@ class User extends Authenticatable
         'role',
         'name',
         'email',
-        'password'
+        'password',
+        'status',
     ];
+
+    // Active Guards
+    public function scopeActiveGuards($query)
+    {
+        return $query->where('role', 'security_guard')
+            ->where('status', 'active');
+    }
+
+    // Active Clients
+    public function scopeActiveClients($query)
+    {
+        return $query->where('role', 'client')
+            ->where('status', 'active');
+    }
+
+    // Pending Requests (applicants or guards waiting approval)
+    public function scopePendingRequests($query)
+    {
+        return $query->where('status', 'pending');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

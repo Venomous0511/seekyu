@@ -5,6 +5,25 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
+@layer components {
+    .sidebar {
+        transition: all 0.3s ease;
+    }
 
+    .sidebar-item.active {
+        background-color: #3b82f6;
+        color: white;
+    }
+
+    .sidebar-item.active:hover {
+        background-color: #2563eb;
+    }
+
+    .content-section {
+        display: none;
+    }
+
+    .content-section.active {
+        display: block;
+    }
 }

@@ -8,6 +8,7 @@
     <title>@yield('title', config('app.name', 'SeekYu'))</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {!! ToastMagic::styles() !!}
 </head>
 
 <body class="antialiased">
@@ -15,6 +16,8 @@
     <main class="relative z-10">
         @yield('content')
     </main>
+
+    {!! ToastMagic::scripts() !!}
 </body>
 
 </html>

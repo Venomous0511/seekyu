@@ -1,5 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
+
 @section('title', 'SeekYu - Human Resources Dashboard')
+
 @section('content')
 <section class="min-h-screen flex flex-col">
     <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
