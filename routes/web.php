@@ -1,91 +1,71 @@
 <?php
 
+use App\Http\Controllers\Auth\RoleLoginController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\AccountController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\RoleLoginController;
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\DashboardController;
 use App\Models\User;
+use App\Http\Middleware\RoleMiddleware;
 
 // For testing: List all users
 Route::get('/test-users', function () {
-    $users = User::all()->groupBy('role'); // group by role
+    $users = User::all()->groupBy('role');
     return view('test-users', compact('users'));
 });
 
 // Home route
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', fn() => view('welcome'));
 
-// Show login page for SG / Client
+// Show login pages
 Route::get('/login/sg', [RoleLoginController::class, 'showSGLogin'])->name('login.sg');
-
-// Show login page for Admin / HR
 Route::get('/login/admin', [RoleLoginController::class, 'showAdminLogin'])->name('login.admin');
 
-// Process login (shared)
+// Process login
 Route::post('/login', [RoleLoginController::class, 'login'])->name('login.process');
 
-// Super Admin dashboard
-Route::middleware(['auth', 'role:super_admin'])->group(function () {
+// Super Admin dashboard + account management
+Route::middleware(['auth', RoleMiddleware::class . ':super_admin'])->group(function () {
     Route::get('/dashboard/super-admin', [DashboardController::class, 'index'])
         ->name('dashboard.super-admin');
 
-    // Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
-    // Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-    // Route::put('/accounts/{user}', [AccountController::class, 'update']);
-    // Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
+    // Account Management
+    Route::resource('admin/accounts', AccountController::class)->names('admin.accounts');
+
+
+    // Extra routes for restore + force delete
+    Route::get('admin/accounts/{account}/password', [AccountController::class, 'editPassword'])
+        ->name('admin.accounts.password');
+
+    Route::put('admin/accounts/{account}/password', [AccountController::class, 'updatePassword'])
+        ->name('admin.accounts.password.update');
+    Route::post('admin/accounts/{id}/restore', [AccountController::class, 'restore'])->name('admin.accounts.restore');
+    Route::delete('admin/accounts/{id}/force-delete', [AccountController::class, 'forceDelete'])->name('admin.accounts.force-delete');
 });
 
-// Admin dashboards
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard/admin', fn() => view('dashboard.admin.index'))->name('dashboard.admin');;
-
-    // Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
-    // Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-    // Route::put('/accounts/{user}', [AccountController::class, 'update']);
-    // Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
+// Admin dashboard
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
+    Route::get('/dashboard/admin', fn() => view('dashboards.admin.index'))->name('dashboard.admin');
 });
 
 // HR dashboard
-Route::middleware(['auth', 'role:hr'])->group(function () {
-    Route::get('/dashboard/human-resources', fn() => view('dashboard.human_resources.index'))->name('dashboard.hr');;
-
-    // Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
-    // Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-    // Route::put('/accounts/{user}', [AccountController::class, 'update']);
-    // Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
+Route::middleware(['auth', RoleMiddleware::class . ':hr'])->group(function () {
+    Route::get('/dashboard/human-resources', fn() => view('dashboards.human_resources.index'))->name('dashboard.hr');
 });
 
 // Head Security Guard dashboard
-Route::middleware(['auth', 'role:head_security_guard'])->group(function () {
-    Route::get('/dashboard/head-sg', fn() => view('dashboard.head_security_guard.index'))->name('dashboard.head-sg');;
-
-    // Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
-    // Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-    // Route::put('/accounts/{user}', [AccountController::class, 'update']);
-    // Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
+Route::middleware(['auth', RoleMiddleware::class . ':head_security_guard'])->group(function () {
+    Route::get('/dashboard/head-sg', fn() => view('dashboards.head_security_guard.index'))->name('dashboard.head-sg');
 });
 
-// Security Guard dashboards
-Route::middleware(['auth', 'role:security_guard'])->group(function () {
-    Route::get('/dashboard/security-guard', fn() => view('dashboard.security_guard.index'))->name('dashboard.security-guard');;
-
-    // Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
-    // Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-    // Route::put('/accounts/{user}', [AccountController::class, 'update']);
-    // Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
+// Security Guard dashboard
+Route::middleware(['auth', RoleMiddleware::class . ':security_guard'])->group(function () {
+    Route::get('/dashboard/security-guard', fn() => view('dashboards.security_guard.index'))->name('dashboard.security-guard');
 });
 
 // Client dashboard
-Route::middleware(['auth', 'role:client'])->group(function () {
-    Route::get('/dashboard/client', fn() => view('dashboard.client.index'))->name('dashboard.client');;
-
-    // Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
-    // Route::delete('/accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
-    // Route::put('/accounts/{user}', [AccountController::class, 'update']);
-    // Route::put('/accounts/{user}/password', [AccountController::class, 'changePassword']);
+Route::middleware(['auth', RoleMiddleware::class . ':client'])->group(function () {
+    Route::get('/dashboard/client', fn() => view('dashboards.client.index'))->name('dashboard.client');
 });
 
 // Logout route

@@ -17,7 +17,7 @@ class UserFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'status' => $this->faker->randomElement(['active', 'inactive', 'pending']),
-            'password' => bcrypt('password123'), // default password for testing
+            'password' => bcrypt('password123'),
         ];
     }
 

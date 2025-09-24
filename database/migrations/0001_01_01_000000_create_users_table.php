@@ -25,6 +25,9 @@ return new class extends Migration
             $table->string('password');
             $table->enum('status', ['active', 'inactive', 'pending'])->default('pending');
 
+            // Soft Deletes
+            $table->softDeletes();
+
             // Authentication Helpers
             $table->rememberToken();
             $table->timestamps();

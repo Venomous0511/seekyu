@@ -27,9 +27,8 @@ class RoleLoginController extends Controller
     {
         // Validate input
         $request->validate([
-            'role_id' => 'required',
-            'regex:/^(sg|hsg|c|adm|sa|hr)\.\d+$/',
-            'password' => 'required|string',
+            'role_id' => ['required', 'regex:/^(sg|hsg|c|adm|sa|hr)\.\d+$/'],
+            'password' => ['required', 'string'],
         ]);
 
         // Extract prefix and ID
