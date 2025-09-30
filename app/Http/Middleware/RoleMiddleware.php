@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
@@ -12,22 +12,19 @@ class RoleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string[]  ...$roles
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
         $user = Auth::user();
 
         if (!$user || !in_array($user->role, $roles)) {
             // Option 1: abort with 403 forbidden
-            // abort(403, 'Unauthorized');
+            abort(403, 'Unauthorized');
 
             // Option 2: redirect to homepage with message
-            ToastMagic::error('You do not have permission to access this page.', 'Access Denied');
-            return redirect('/');
+            // ToastMagic::error('You do not have permission to access this page.', 'Access Denied');
+            // return redirect('/');
         }
 
         return $next($request);

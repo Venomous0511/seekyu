@@ -8,4 +8,73 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-brand-dark: #0a2239;
+    --color-brand-primary: #0a2239;
+    --color-brand-accent: #facc15;
+    --color-brand-light: #e6eef6;
+
+    --shadow-soft: 0 10px 30px -12px rgba(2, 6, 23, 0.25);
+}
+
+/* Global */
+:root {
+  --ring: 0 0% 100% / 6%;
+}
+
+/* Smooth hover lift */
+.lift {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -16px rgba(2, 6, 23, 0.35);
+}
+
+/* Modal */
+.modal-hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+/* Sidebar */
+.sidebar {
+  transition: transform 0.25s ease, width 0.25s ease;
+}
+
+.sidebar-item {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-item.active {
+  background-color: rgb(30 41 59 / 0.45);
+  color: #fff;
+}
+
+/* Calendar */
+calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-cell {
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom Scrollbars */
+.thin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
 }

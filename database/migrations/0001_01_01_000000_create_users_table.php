@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             // Role System
-            $table->string('role_id')->nullable()->constrained('roles');
+            $table->string('role_id')->unique()->constrained('roles');
             $table->string('role')->default('applicant');
 
             // User Info
@@ -25,10 +25,8 @@ return new class extends Migration
             $table->string('password');
             $table->enum('status', ['active', 'inactive', 'pending'])->default('pending');
 
-            // Soft Deletes
             $table->softDeletes();
 
-            // Authentication Helpers
             $table->rememberToken();
             $table->timestamps();
         });
