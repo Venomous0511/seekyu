@@ -43,6 +43,9 @@ Route::middleware(['auth', RoleMiddleware::class . ':Super Admin'])->group(funct
 Route::middleware(['auth', RoleMiddleware::class . ':Admin'])->group(function () {
     Route::resource('/dashboard/admin', AdminController::class)
         ->names('admin.accounts');
+
+    Route::get('/dashboard/super-admin', [SuperAdminController::class, 'index'])
+        ->name('dashboard.super-admin');
 });
 
 
